@@ -1,33 +1,45 @@
 import 'package:flutter/material.dart';
 
-class TaskTile extends StatelessWidget {
+class TaskTile extends StatefulWidget {
+  @override
+  State<TaskTile> createState() => _TaskTileState();
+}
+
+class _TaskTileState extends State<TaskTile> {
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('A task'),
-      trailing: TextCheckBox(),
+      title: Text(
+        'A task',
+        style: TextStyle(
+            decoration: isChecked ? TextDecoration.lineThrough : null),
+      ),
+      trailing: TextCheckBox(
+          checkboxState: isChecked,
+          toogleCheckBoxState: (bool? checkBoxState) {
+            setState(() {
+              isChecked = checkBoxState ?? false;
+            });
+          }),
     );
   }
 }
 
-class TextCheckBox extends StatefulWidget {
-  @override
-  State<TextCheckBox> createState() => _TextCheckBoxState();
-}
+class TextCheckBox extends StatelessWidget {
+  final bool checkboxState;
+  final Function(bool?) toogleCheckBoxState;
 
-class _TextCheckBoxState extends State<TextCheckBox> {
-  bool isChecked = false;
+  TextCheckBox(
+      {required this.checkboxState, required this.toogleCheckBoxState});
 
   @override
   Widget build(BuildContext context) {
     return Checkbox(
       activeColor: Colors.lightBlueAccent,
-      value: isChecked,
-      onChanged: (newValue) {
-        setState(() {
-          isChecked = newValue!;
-        });
-      },
+      value: checkboxState,
+      onChanged: toogleCheckBoxState,
     );
   }
 }
